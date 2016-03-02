@@ -1,0 +1,7 @@
+#!/bin/sh
+
+osascript <<EOF
+  tell application "Firefox Developer Edition"
+    open location "$@"
+  end tell
+EOF
