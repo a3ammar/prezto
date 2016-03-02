@@ -31,3 +31,6 @@
 [submodule "modules/prompt/external/powerlevel10k"]
 	path = modules/prompt/external/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
+[submodule "modules/histdb/external"]
+  path = modules/histdb/external
+  url = https://github.com/larkery/zsh-histdb.git
