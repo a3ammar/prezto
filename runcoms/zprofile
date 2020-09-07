@@ -129,8 +129,12 @@ fi
 # Go
 #
 if (( $+commands[go] )); then
-  export GOPATH="$HOME/Code/go/"
-  path+=( $HOME/Code/go/bin )
+  export GOROOT="/usr/local/opt/go/libexec"
+  export GOPATH="$HOME/Code/go"
+  path+=(
+    $GOROOT/bin/
+    $GOPATH/bin
+  )
 fi
 
 #
