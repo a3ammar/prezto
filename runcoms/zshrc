@@ -51,9 +51,10 @@ fi
 # Re-alias rm to be less interactive (asks once instead of each directory)
 alias rm="${aliases[rm]:-rm} -I"
 
-# Hide the banner in ffmpeg
+# Hide the banner in ffmpeg utilities
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
 
 if [[ "$OSTYPE" == darwin* ]]; then
   alias rm='reattach-to-user-namespace trash -F'
