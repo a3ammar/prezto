@@ -131,6 +131,7 @@ fi
 if (( $+commands[go] )); then
   export GOROOT="/usr/local/opt/go/libexec"
   export GOPATH="$HOME/Code/go"
+  export GOPRIVATE="*.wirefilter.com"
   path+=(
     $GOROOT/bin/
     $GOPATH/bin
