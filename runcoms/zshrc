@@ -57,7 +57,7 @@ alias ffprobe='ffprobe -hide_banner'
 alias ffplay='ffplay -hide_banner'
 
 if [[ "$OSTYPE" == darwin* ]]; then
-  alias rm='reattach-to-user-namespace trash -F'
+  alias rm='trash -F'
   alias rmo='/bin/rm'
 fi
 
