@@ -1,3 +1,4 @@
+# -*- mode: sh -*-
 #
 # Defines environment variables.
 #

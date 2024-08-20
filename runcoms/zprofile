@@ -1,3 +1,4 @@
+# -*- mode: sh -*-
 #
 # Executes commands at login pre-zshrc.
 #
@@ -6,22 +7,40 @@
 #
 
 #
+# My Variables
+#
+
+# Make unzip quieter
+export UNZIP="-q"
+
+#
 # Browser
 #
 
 if [[ -z "$BROWSER" && "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
+  export BROWSER='browser'
+  export HOMEBREW_BROWSER=$BROWSER
 fi
+
+# Read homebrew's API token
+if [[ "$OSTYPE" == darwin* ]]; then
+  export HOMEBREW_GITHUB_API_TOKEN=$(cat $HOME/.zsh.secret )
+fi
+
 
 #
 # Editors
 #
 
 if [[ -z "$EDITOR" ]]; then
-  export EDITOR='nano'
+  if [[ "$OSTYPE" == darwin* ]]; then
+    export EDITOR='emacsclient'
+  else
+    export EDITOR='vim'
+  fi
 fi
 if [[ -z "$VISUAL" ]]; then
-  export VISUAL='nano'
+  export VISUAL="$EDITOR"
 fi
 if [[ -z "$PAGER" ]]; then
   export PAGER='less'
@@ -33,6 +52,10 @@ fi
 
 if [[ -z "$LANG" ]]; then
   export LANG='en_US.UTF-8'
+fi
+
+if [[ -z "$LC_ALL" ]]; then
+  export LC_ALL='en_US.UTF-8'
 fi
 
 #
@@ -49,9 +72,13 @@ typeset -gU cdpath fpath mailpath path
 
 # Set the list of directories that Zsh searches for programs.
 path=(
+  $HOME/.{r,py}env/{bin,shims}
+  $HOME/Code/bin
+  $HOME/.zprezto/bin
   $HOME/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
+  /Applications/Emacs.app/Contents/MacOS/bin
   $path
 )
 
@@ -63,7 +90,7 @@ path=(
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X to enable it.
 if [[ -z "$LESS" ]]; then
-  export LESS='-g -i -M -R -S -w -X -z-4'
+  export LESS='-g -i -M -R -S -w -X -z-4 -F'
 fi
 
 # Set the Less input preprocessor.
@@ -71,3 +98,87 @@ fi
 if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+#
+# Temporary Files
+#
+
+if [[ ! -d "$TMPDIR" ]]; then
+  export TMPDIR="/tmp/$LOGNAME"
+  mkdir -p -m 700 "$TMPDIR"
+fi
+
+TMPPREFIX="${TMPDIR%/}/zsh"
+
+
+#
+# Yarn
+#
+
+if (( $+commands[yarn] )); then
+  path+=$(yarn global bin)
+fi
+
+
+#
+# psql
+#
+
+path+=(/usr/local/opt/libpq/bin/)
+
+#
+# Go
+#
+if (( $+commands[go] )); then
+  export GOROOT="/usr/local/opt/go/libexec"
+  export GOPATH="$HOME/Code/go"
+  export GOPRIVATE="*.wirefilter.com"
+  path+=(
+    $GOROOT/bin/
+    $GOPATH/bin
+  )
+fi
+
+#
+# Rust
+#
+export RUSTUP_HOME="$HOME/Code/rust/rustup"
+export CARGO_HOME="$HOME/Code/rust/cargo"
+path+=($HOME/Code/rust/cargo/bin/)
+
+#
+# SQLite
+#
+path=(
+  "/usr/local/opt/sqlite/bin"
+  $path
+)
+
+#
+# bat
+#
+if (( $+commands[bat] )); then
+  export BAT_THEME="zenburn"
+  alias cat="bat --style=plain"
+fi
+
+#
+# jump - fasd replacement
+#
+if (( $+commands[jump] )); then
+  eval "$(jump shell)"
+fi
+
+#
+# GNU units
+#
+if (( $+commands[gunits] )); then
+  path=(
+    "/usr/local/opt/gnu-units/libexec/gnubin"
+    $path
+  )
+fi
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+path=("$JAVA_HOME/bin" $path)
+export TTU_PATH="/Library/Application Support/teradata/client/20.00"
