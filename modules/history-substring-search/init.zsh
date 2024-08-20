@@ -56,8 +56,8 @@ fi
 
 if [[ -n "$key_info" ]]; then
   # Emacs
-  bindkey -M emacs "$key_info[Control]P" history-substring-search-up
-  bindkey -M emacs "$key_info[Control]N" history-substring-search-down
+  bindkey -M emacs "\ep" history-substring-search-up
+  bindkey -M emacs "\en" history-substring-search-down
 
   # Vi
   bindkey -M vicmd "k" history-substring-search-up
