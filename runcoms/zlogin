@@ -1,3 +1,4 @@
+# -*- mode: sh -*-
 #
 # Executes commands at login post-zshrc.
 #
