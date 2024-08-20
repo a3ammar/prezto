@@ -1,3 +1,4 @@
+# -*- mode: sh -*-
 #
 # Executes commands at the start of an interactive session.
 #
@@ -10,4 +11,78 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+
+# Unalias `man` first to stop zsh from complaining
+if (( $+aliases[man] )); then
+  unalias man
+fi
+
+# Modify the colors of man pages to be more solarizy
+man() {
+  env LESS_TERMCAP_mb=$'\e[01;31m'\
+      LESS_TERMCAP_md=$'\e[01;38;01;94m' \
+      LESS_TERMCAP_so=$'\e[07;38;05;136m' \
+      LESS_TERMCAP_us=$'\e[04;38;05;223m' \
+      LESS_TERMCAP_me=$'\e[0m' \
+      LESS_TERMCAP_se=$'\e[0m' \
+      LESS_TERMCAP_ue=$'\e[0m' \
+      man "$@"
+}
+
+# Personal aliases
+alias e='emacsclient'
+alias la='ls -a'
+alias lal='ls -al'
+alias tma='tmux new-session -A -s default'
+alias up='exec zsh'
+# Change grep to ripgrep
+if (( $+commands[rg] )); then
+  alias grep=rg
+fi
+
+# Alias `jump hint`
+if (( $+commands[jump] )); then
+   alias jj='jump hint'
+fi
+
+# Re-alias rm to be less interactive (asks once instead of each directory)
+# alias rm="${aliases[rm]:-rm} -I"
+alias rm='trash'
+
+# Hide the banner in ffmpeg utilities
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
+
+# Disable globbing pip commands
+alias pip='noglob pip'
+
+if is-darwin; then
+  alias rmo='/bin/rm'
+fi
+
+# Setup direnv. It evals `.envrc` file in $PWD
+if is-darwin; then
+  eval "$(direnv hook zsh)"
+fi
+
+# Override zsh-autosuggestion to allow forward-char for partial completion
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
+  end-of-line
+  vi-forward-char
+  vi-end-of-line
+  vi-add-eol
+)
+
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
+  forward-char
+  forward-word
+  emacs-forward-word
+  vi-forward-word
+  vi-forward-word-end
+  vi-forward-blank-word
+  vi-forward-blank-word-end
+)
+
+# Custom binding
+bindkey '^[w' backward-kill-word
