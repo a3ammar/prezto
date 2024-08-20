@@ -1,0 +1,33 @@
+# Load dependencies.
+pmodload 'helper'
+
+function prompt_ammar_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent sp subst)
+
+  # Tell prezto we can manage this prompt
+  zstyle ':prezto:module:prompt' managed 'yes'
+
+  # Set editor-info parameters.
+  zstyle ':prezto:module:editor:info:completing' format '%B%F{7}...%f%b'
+  zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{1}❯%F{3}❯%F{2}❯%f%b'
+  zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format ' %F{3}♺%f'
+  zstyle ':prezto:module:editor:info:keymap:alternate' format ' %B%F{2}❮%F{3}❮%F{1}❮%f%b'
+
+  _prompt_ammar_pwd="%2~"
+  # Define prompts.
+  PROMPT='%F{223}%m%f %B%F{12}${_prompt_ammar_pwd}%b%(!. %B%F{1}#%f%b.)${editor_info[keymap]} '
+  SPROMPT='zsh: correct %F{1}%R%f to %F{2}%r%f [nyae]? '
+}
+
+function prompt_ammar_preview {
+  local +h PROMPT=''
+  local +h RPROMPT=''
+  local +h SPROMPT=''
+
+  editor-info 2> /dev/null
+  prompt_preview_theme 'ammar'
+}
+
+prompt_ammar_setup "$@"

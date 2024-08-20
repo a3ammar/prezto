@@ -21,8 +21,7 @@ setopt BEEP                     # Beep on error in line editor.
 #
 
 # Treat these characters as part of a word.
-zstyle -s ':prezto:module:editor' wordchars 'WORDCHARS' \
-  || WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+WORDCHARS='*?[]~&;!#$%^(){}<>'
 
 # Use human-friendly identifiers.
 zmodload zsh/terminfo
